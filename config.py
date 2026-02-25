@@ -1,0 +1,3 @@
+MAX_DEPTH = 2
+REQUEST_TIMEOUT = 5
+USER_AGENT = "VulnX-Pro-Scanner"

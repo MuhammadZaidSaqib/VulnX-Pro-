@@ -1,0 +1,35 @@
+VulnX-Pro/
+│
+├── app.py
+├── config.py
+├── requirements.txt
+│
+├── core/
+│   ├── crawler.py
+│   ├── extractor.py
+│   ├── payloads.py
+│   ├── injector.py
+│   ├── analyzer.py
+│   ├── xss_scanner.py
+│   ├── sqli_scanner.py
+│   ├── severity.py
+│   ├── scanner.py
+│   └── reporter.py
+│
+├── database/
+│   └── db.py
+│
+├── reports/
+│
+├── templates/
+│   ├── layout.html
+│   ├── index.html
+│   ├── dashboard.html
+│   └── report.html
+│
+├── static/
+│   ├── css/style.css
+│
+└── utils/
+    ├── logger.py
+    └── validator.py

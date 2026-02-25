@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>VulnX Pro Scanner</h1>
+
+<form method="POST" action="/scan">
+    <input type="text" name="target" placeholder="Enter Target URL" required>
+    <button type="submit">Start Scan</button>
+</form>
+
+{% endblock %}

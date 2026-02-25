@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>Scan Results</h2>
+
+{% for vuln in results %}
+<div>
+    <p><strong>Type:</strong> {{ vuln.type }}</p>
+    <p><strong>Endpoint:</strong> {{ vuln.endpoint }}</p>
+    <p><strong>Payload:</strong> {{ vuln.payload }}</p>
+    <p><strong>Severity:</strong> {{ vuln.severity }}</p>
+    <hr>
+</div>
+{% endfor %}
+
+{% endblock %}
