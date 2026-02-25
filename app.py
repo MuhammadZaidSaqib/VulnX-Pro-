@@ -1,37 +1,42 @@
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from core.scanner import run_scan
-from database.db import init_db
-import sqlite3
-
+from database.db import init_db, save_results
 
 app = Flask(__name__)
 init_db()
 
-@app.route('/')
+@app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route('/scan', methods=["POST"])
+@app.route("/api/scan", methods=["POST"])
 def scan():
-    target = request.form.get("target")
-    results = run_scan(target)
+    data = request.get_json()
 
-    conn = sqlite3.connect("database/scans.db")
-    cursor = conn.cursor()
+    if not data or "target" not in data:
+        return jsonify({"error": "No target provided"}), 400
 
-    for r in results:
-        cursor.execute(
-            "INSERT INTO scans (target, vulnerability, endpoint, payload, severity) VALUES (?, ?, ?, ?, ?)",
-            (target, r["type"], r["endpoint"], r["payload"], r["severity"])
-        )
+    target = data["target"]
 
-    conn.commit()
-    conn.close()
+    try:
+        results = run_scan(target)
+        save_results(target, results)
 
-    return render_template("dashboard.html", results=results)
+        return jsonify({
+            "count": len(results),
+            "results": [
+                {
+                    "type": r[0],
+                    "endpoint": r[1],
+                    "payload": r[2]
+                }
+                for r in results
+            ]
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     app.run(debug=True)

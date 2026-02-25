@@ -1,11 +1,62 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VulnX_Pro Scanner</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
 
-<h1>VulnX Pro Scanner</h1>
+<div class="frame">
 
-<form method="POST" action="/scan">
-    <input type="text" name="target" placeholder="Enter Target URL" required>
-    <button type="submit">Start Scan</button>
-</form>
+    <header>
+        <h1>VulnX_Pro</h1>
+        <span>WEB VULNERABILITY & SQL INJECTION SCANNER</span>
+        <p>SYSTEM STATUS: ACTIVE // SCANNING AUTHORIZED TARGETS...</p>
+    </header>
 
-{% endblock %}
+    <div class="top-section">
+
+        <div class="targets">
+            <h3>TARGET SYSTEM</h3>
+            <input id="targetInput" placeholder="https://target.com">
+            <button onclick="startScan()">START SCAN</button>
+            <ul id="targetList"></ul>
+        </div>
+
+        <div class="events">
+            <h3>EVENT STREAM</h3>
+            <div id="eventStream" class="log"></div>
+        </div>
+
+        <div class="alerts">
+            <h3>CRITICAL ALERTS</h3>
+            <div id="alertBox"></div>
+
+            <h3>SCAN PROGRESS</h3>
+            <div class="circle">
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-section">
+
+        <div class="chart-box">
+            <h3>DATA VULNERABILITY TYPES</h3>
+            <canvas id="vulnChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <h3>DATA VISUALIZER</h3>
+            <canvas id="trendChart"></canvas>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
