@@ -1,3 +1,5 @@
 MAX_DEPTH = 2
 REQUEST_TIMEOUT = 5
-USER_AGENT = "VulnX-Pro-Scanner"
+THREADS = 5
+RATE_LIMIT_DELAY = 0.4
+USER_AGENT = "VulnX_Pro-Scanner"

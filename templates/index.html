@@ -2,33 +2,48 @@
 <html>
 <head>
     <title>VulnX_Pro Scanner</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <div class="frame">
 
+    <!-- HEADER -->
     <header>
         <h1>VulnX_Pro</h1>
-        <span>WEB VULNERABILITY & SQL INJECTION SCANNER</span>
+        <div class="subtitle">WEB VULNERABILITY & SQL INJECTION SCANNER</div>
         <p>SYSTEM STATUS: ACTIVE // SCANNING AUTHORIZED TARGETS...</p>
     </header>
 
+    <!-- TOP SECTION -->
     <div class="top-section">
 
+        <!-- TARGET SYSTEM PANEL -->
         <div class="targets">
             <h3>TARGET SYSTEM</h3>
-            <input id="targetInput" placeholder="https://target.com">
+
+            <input
+                type="text"
+                id="targetInput"
+                placeholder="https://example.com">
+
             <button onclick="startScan()">START SCAN</button>
+
             <ul id="targetList"></ul>
         </div>
 
+        <!-- EVENT STREAM PANEL -->
         <div class="events">
             <h3>EVENT STREAM</h3>
             <div id="eventStream" class="log"></div>
         </div>
 
+        <!-- ALERTS & PROGRESS PANEL -->
         <div class="alerts">
             <h3>CRITICAL ALERTS</h3>
             <div id="alertBox"></div>
@@ -41,22 +56,33 @@
 
     </div>
 
+    <!-- BOTTOM SECTION -->
     <div class="bottom-section">
 
+        <!-- VULNERABILITY TYPE CHART -->
         <div class="chart-box">
             <h3>DATA VULNERABILITY TYPES</h3>
             <canvas id="vulnChart"></canvas>
         </div>
 
+        <!-- THREAT TREND CHART -->
         <div class="chart-box">
-            <h3>DATA VISUALIZER</h3>
+            <h3>THREAT TREND</h3>
             <canvas id="trendChart"></canvas>
+        </div>
+
+        <!-- SEVERITY DISTRIBUTION CHART -->
+        <div class="chart-box">
+            <h3>SEVERITY DISTRIBUTION</h3>
+            <canvas id="severityChart"></canvas>
         </div>
 
     </div>
 
 </div>
 
+<!-- JS -->
 <script src="/static/js/dashboard.js"></script>
+
 </body>
 </html>

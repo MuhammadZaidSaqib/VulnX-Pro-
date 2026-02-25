@@ -1,5 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+import requests
+
 from core.crawler import crawl
 from core.extractor import extract_forms
 from core.sqli import scan_sqli
@@ -17,20 +19,23 @@ def test_url_parameters(url):
 
     for key in params:
         for payload in ["' OR 1=1--", "<script>alert(1)</script>"]:
-            new_params = params.copy()
-            new_params[key] = payload
+            try:
+                new_params = params.copy()
+                new_params[key] = payload
 
-            new_query = urlencode(new_params, doseq=True)
-            new_url = urlunparse(parsed._replace(query=new_query))
+                new_query = urlencode(new_params, doseq=True)
+                new_url = urlunparse(parsed._replace(query=new_query))
 
-            import requests
-            r = requests.get(new_url)
+                r = requests.get(new_url, timeout=5)
 
-            if payload in r.text:
-                results.append(("Reflected XSS", url, payload))
+                if payload in r.text:
+                    results.append(("Reflected XSS", url, payload))
 
-            if "sql" in r.text.lower() or "mysql" in r.text.lower():
-                results.append(("SQL Injection", url, payload))
+                if "sql" in r.text.lower() or "mysql" in r.text.lower():
+                    results.append(("SQL Injection", url, payload))
+
+            except Exception:
+                continue
 
     return results
 
@@ -40,17 +45,22 @@ def run_scan(target):
     urls = crawl(target)
 
     def process(url):
+        local_results = []
+
         forms = extract_forms(url)
 
-        # Form scanning
         for form in forms:
-            results.extend(scan_sqli(url, form))
-            results.extend(scan_xss(url, form))
+            local_results.extend(scan_sqli(url, form))
+            local_results.extend(scan_xss(url, form))
 
-        # URL parameter scanning
-        results.extend(test_url_parameters(url))
+        local_results.extend(test_url_parameters(url))
+
+        return local_results
 
     with ThreadPoolExecutor(max_workers=THREADS) as executor:
-        executor.map(process, urls)
+        futures = executor.map(process, urls)
+
+        for result in futures:
+            results.extend(result)
 
     return results

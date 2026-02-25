@@ -1,16 +1,20 @@
 import requests
 from urllib.parse import urljoin
+from core.rate_limiter import apply_rate_limit
 
-def inject_payload(url, form, payload):
+def inject(url, form, payload):
+    apply_rate_limit()
+
     target = urljoin(url, form["action"])
-    data = {input_name: payload for input_name in form["inputs"]}
+    data = {name: payload for name in form["inputs"]}
 
     try:
         if form["method"] == "post":
-            response = requests.post(target, data=data)
+            r = requests.post(target, data=data, timeout=5)
         else:
-            response = requests.get(target, params=data)
+            r = requests.get(target, params=data, timeout=5)
 
-        return response.text
-    except:
+        return r.text
+
+    except Exception:
         return ""

@@ -1,12 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-from config import REQUEST_TIMEOUT, USER_AGENT
+from config import REQUEST_TIMEOUT, USER_AGENT, MAX_DEPTH
 
 visited = set()
 
-def crawl(url, depth=0, max_depth=2):
-    if depth > max_depth or url in visited:
+def crawl(url, depth=0):
+    if depth > MAX_DEPTH or url in visited:
         return []
 
     visited.add(url)
@@ -20,7 +20,7 @@ def crawl(url, depth=0, max_depth=2):
         for link in soup.find_all("a", href=True):
             full_url = urljoin(url, link["href"])
             if full_url.startswith(url):
-                urls.extend(crawl(full_url, depth + 1, max_depth))
+                urls.extend(crawl(full_url, depth + 1))
 
     except Exception:
         pass
